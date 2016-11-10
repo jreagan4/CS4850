@@ -9,7 +9,6 @@ if too many host swaps occur, stop host swapping for x amount of time
 TCP_IP = '127.0.0.1'
 TCP_PORT = 5555
 BUFF_SIZE = 1024
-CL_CON = {} # socket.getnameinfo() returns host, portno
 
 def start_soc():
         soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
