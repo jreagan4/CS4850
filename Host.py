@@ -16,6 +16,7 @@ def socket_handler(client):
         data = client.recv(BUFF_SIZE)
         if data :
             print("received data: ", data.decode('utf-8'))
+            client.send(data)
 
 def run():
     soc = start_soc()
@@ -23,6 +24,7 @@ def run():
         client, addr = soc.accept()
         print("connection from ", addr)
         start_new_thread(socket_handler, (client,))
+
 
 if __name__ == '__main__':
     run()
