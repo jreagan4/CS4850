@@ -1,9 +1,15 @@
 import socket
 from _thread import start_new_thread
 
+"""
+packet loss against host, if host < threshold test all connections for better stability
+if too many host swaps occur, stop host swapping for x amount of time
+"""
+
 TCP_IP = '127.0.0.1'
 TCP_PORT = 5555
 BUFF_SIZE = 1024
+CL_CON = {} # socket.getnameinfo() returns host, portno
 
 def start_soc():
         soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -14,6 +20,7 @@ def start_soc():
 def socket_handler(client):
     while True:
         data = client.recv(BUFF_SIZE)
+        chost, cport = client.getnameinfo()
         if data :
             print("received data: ", data.decode('utf-8'))
             client.send(data)
