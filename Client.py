@@ -12,16 +12,19 @@ def startConn():
        ttl = struct.pack('b', 1) # sets time to live to 1 hop for local testing, need to change this later, format for windows to not be dumb
        soc.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl) # set socket options, also magic
 
-       while 1:
+        while 1:
               MESSAGE = input("Enter message: ")
               soc.sendto(MESSAGE.encode('utf-8'), MCAST_GROUP)
               """
               .encode() is important here, as sockets can only deal with bit-objects
               utf-8 makes the data decode as a string object
               """
+        try:
               data, addr = soc.recvfrom(BUFF_SIZE)
               print("%s: %s" % (addr, data.decode('utf-8')))
 
+        except socket.timeout:
+            # do other stuff
 try:
        startConn()
 
