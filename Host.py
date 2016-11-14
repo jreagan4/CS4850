@@ -24,7 +24,6 @@ def run():
     while 1:
         data, addr = soc.recvfrom(BUFF_SIZE)
         print("Data from ", addr) # server-side showing that we recieved something
-        soc.sendto(data, MCAST_GRP) #send the message to everyone
         
 
 
