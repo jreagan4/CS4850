@@ -1,31 +1,30 @@
 import socket
+import struct
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 5555
+MCAST_GROUP = ('224.2.34.56', 10000)
 BUFF_SIZE = 1024
 MESSAGE = "This did not work"
 
-def setIP(ip):
-       TCP_IP = ip
-
-def setPort(port):
-       TCP_PORT = port
-        
-def startConn(ip, port):
-       soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # this is magic socket library stuff, just go with it
-       soc.connect((TCP_IP, TCP_PORT)) # connect to determined port and IP with our new socket object made from magic
+    
+def startConn():
+       soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # this is magic socket library stuff, just go with it
+       soc.settimeout(0.3) # sets timeout so we don't block forever
+       ttl = struct.pack('b', 1) # sets time to live to 1 hop for local testing, need to change this later, format for windows to not be dumb
+       soc.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl) # set socket options, also magic
 
        while 1:
-       MESSAGE = input("Enter message: ")
-       soc.send(MESSAGE.encode('utf-8'))
-       """
-       .encode() is important here, as sockets can only deal with bit-objects
-       utf-8 makes the data decode as a string object
-       """
-       data = soc.recv(BUFF_SIZE)
-       print(data.decode('utf-8'))
-    
+              MESSAGE = input("Enter message: ")
+              soc.sendto(MESSAGE.encode('utf-8'), MCAST_GROUP)
+              """
+              .encode() is important here, as sockets can only deal with bit-objects
+              utf-8 makes the data decode as a string object
+              """
+              data, addr = soc.recvfrom(BUFF_SIZE)
+              print("%s: %s" % (addr, data.decode('utf-8')))
 
-startConn(TCP_IP, TCP_PORT)
+try:
+       startConn()
 
-soc.close()
+finally:
+       print("disconnecting")
+       soc.close()
