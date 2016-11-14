@@ -1,7 +1,7 @@
 import socket
 import struct
 
-MCAST_GROUP = ('224.2.34.56', 10000)
+MCAST_GROUP = ('224.2.34.56', 5555)
 BUFF_SIZE = 1024
 MESSAGE = "This did not work"
 
