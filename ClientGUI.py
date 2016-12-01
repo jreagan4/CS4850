@@ -4,7 +4,6 @@ import struct
 import threading
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QStyleFactory
-from PyQt5.Qt import QStringListModel
 #from PyQt5.QtCore import *
 #from PyQt5.QtGui import *
 
@@ -12,9 +11,9 @@ MCAST_ADDR = '224.2.34.56'
 MCAST_GRP = ('224.2.34.56', 5555)
 SERV_ADDR = ('', 5555)
 BUFF_SIZE = 75
-MESSAGE = "This did not work"
+MESSAGE = ""
 
-qtCreatorFile = "GUI_V3.ui" # Enter file here.
+qtCreatorFile = "GUI_V2.ui" # Enter file here.
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 soc = socket.socket                
@@ -72,24 +71,33 @@ class MyApp(QMainWindow):
         self.ui.sendButton.clicked.connect(self.handleSendButton)
         self.ui.addToCallButton.clicked.connect(self.handleAddToCallButton)
         self.ui.removeFromCallButton.clicked.connect(self.handleRemoveFromCallButton)
+        self.ui.muteButton.clicked.connect(self.handleMuteButton)
         
     def updateText(self, text):
-        self.ui.chatBox.addItem(text)
-            
+        self.ui.chatBox.addItem(text) 
+           
     def handleSendButton(self):        
         MESSAGE = self.ui.chatInputBox.text()
         if MESSAGE is not '':
             self.ui.chatBox.addItem('Peter: ' +MESSAGE)
         self.ui.chatBox.scrollToBottom()
         self.ui.chatInputBox.clear()
+    
+    def handleMuteButton(self):
+        self.ui.muteButton
         
-    def handleAddToCallButton(self):          
-        self.ui.currentCallList.addItem(self.ui.contactsList.currentItem())
-        self.ui.contactsList.removeItemWidget(self.ui.contactsList.currentItem())
+    def handleAddToCallButton(self):  
+        contactListCount = self.ui.contactList.count()
+        if contactListCount > 0:        
+            self.ui.currentCallList.addItem('Peter')
+            #self.ui.contactsList.removeItemWidget(self.ui.contactsList.currentItem())
         
     def handleRemoveFromCallButton(self):
-        self.ui.contactList.addItem(self.ui.currentCallList.currentItem())
-        self.ui.currentCallList.removeItemWidget(self.ui.currentCallList.currentItem())
+        currentCallCount = self.ui.currentCallList.count()
+        if currentCallCount > 0:
+            self.ui.contactList.addItem(self.ui.currentCallList.currentItem())
+            self.ui.currentCallList.removeItemWidget(self.ui.currentCallList.currentItem())
+    
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
