@@ -4,8 +4,6 @@ import struct
 import threading
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 
 MCAST_ADDR = '224.2.34.56'
 MCAST_GRP = ('224.2.34.56', 5555)
@@ -71,10 +69,10 @@ class MyApp(QMainWindow):
         self.ui.sendButton.clicked.connect(self.handleSendButton)
         
     def handleSendButton(self):
-        #MESSAGE = self.ui.chatInputBox.text()
-        #self.ui.chatBox.addItem((MESSAGE))
+        MESSAGE = self.ui.chatInputBox.text()
+        self.ui.chatBox.addItem((MESSAGE))
         self.ui.chatInputBox.select_all()
-        #self.ui.chatInputBox.clear()
+        self.ui.chatInputBox.clear()
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
